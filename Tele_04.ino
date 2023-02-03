@@ -132,6 +132,8 @@ void setup() {
 
   powerOn(); // Turn on self power hold (if JP1 is not used)
   
+  analogReference(INTERNAL2V56);
+  
  // delay(1000);
   
   // initialize serial communication at 115200 bits per second:
@@ -199,7 +201,7 @@ void TaskMotor(void *pvParameters)
   {
     left = encL.getCnt();
     right = encR.getCnt();
-    sprintf(buf, "{enc:[%d,%d]}", left, right);    // {"enc":[encL,encR]}
+    sprintf(buf, "{\"cmd\":\"enc\",\"val\":[%d,%d]}", left, right);    // {"enc":[encL,encR]}
    //Serial.println(buf);   //debug
 
 #ifdef NR_USART_0 
@@ -245,7 +247,7 @@ void TaskClif(void *pvParameters)
     CRR = analogRead(CR_R);
     pause(cPause);
 
-    sprintf(buf, "{clif:[%d,%d,%d,%d,%d,%d]}", CFL, CFM, CFR, CRL, CRM, CRR);    // {"clif":[CFL, CFM, CFR, CRL, CRM, CRR]}
+    sprintf(buf, "{\"cmd\":\"cliff\",\"val\":[%d,%d,%d,%d,%d,%d]}", CFL, CFM, CFR, CRL, CRM, CRR);    // {"clif":[CFL, CFM, CFR, CRL, CRM, CRR]}
  //   Serial.println(buf);   //debug
 
 #ifdef NR_USART_0 
@@ -278,11 +280,10 @@ void TaskBumpDist(void *pvParameters)
 
   while(1)
   {
-    BPL = analogRead(BP_L);
+    BPL = digitalRead(BP_L);
     pause(bdPause);
-    BPR = analogRead(BP_R);
+    BPR = digitalRead(BP_R);
     pause(bdPause);
-
 
     DFL = analogRead(DF_L);
     pause(bdPause);
@@ -293,7 +294,8 @@ void TaskBumpDist(void *pvParameters)
     DRM = analogRead(DB_M);
     pause(bdPause);
 
-    sprintf(buf, "{bump:[%d,%d,%d,%d,%d,%d]}", BPL, BPR, DFL, DFM, DFR, DRM);    // {"bump":[BPL, BPR, DFL, DFM, DFR, DRM]}
+//    sprintf(buf, "{"cmd":"bump","val":[%d,%d,%d,%d,%d,%d]}", BPL, BPR, DFL, DFM, DFR, DRM);    // {"bump":[BPL, BPR, DFL, DFM, DFR, DRM]}
+    sprintf(buf, "{\"cmd\":\"bump\",\"val\":[%d,%d]}", BPL, BPR);    // {"bump":[BPL, BPR, DFL, DFM, DFR, DRM]}
     // Serial.println(buf);   //debug
 
 #ifdef NR_USART_0 
@@ -347,7 +349,7 @@ void Task_A_U(void *pvParameters)
     I__RPI = analogRead(I_RPI);
     pause(auPause);
 
-    sprintf(buf, "{pwr:[%d,%d,%d,%d,%d,%d]}", U_ML, U_MR, U__BAT, U_EXT, I__ARD, I__RPI);    // {"pwr":[U_ML, U_MR, U__BAT, U_EXT, I__ARD, I__RPI]}
+    sprintf(buf, "{\"cmd\":\"pwr\",\"val\":[%d,%d,%d,%d,%d,%d]}", U__BAT, U_EXT, I__ARD, I__RPI, U_ML, U_MR);    // {"pwr":[U_ML, U_MR, U__BAT, U_EXT, I__ARD, I__RPI]}
    // Serial.println(buf);   //debug
 
 #ifdef NR_USART_0 

@@ -52,9 +52,9 @@ stat: OK
 #define CF_L 70 // A1  - Left-front cliff
 #define CF_M 77 // A8  - Middle-front cliff
 #define CF_R 80 // A11 - Right-front cliff
-#define CR_L 82 // A13 - Left-rear cliff
+#define CR_L 83 // A13 - Left-rear cliff // Hiba a sémán
 #define CR_M 84 // A15 - Middle-rear cliff
-#define CR_R 83 // A14 - Right-rear cliff
+#define CR_R 82 // A14 - Right-rear cliff // Hiba a sémán
 
 //**************************
 // BUMPER sensor
