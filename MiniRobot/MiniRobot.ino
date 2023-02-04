@@ -211,7 +211,7 @@ void TaskMotor(void *pvParameters)
 #ifdef NR_USART_2 
     Serial2.println(buf);  
 #endif          
-    pause(1200);  //1.2 sec
+    pause(500);  //1.2 sec
   }
 }  // end of TaskMotor
 
@@ -305,7 +305,7 @@ void TaskBumpDist(void *pvParameters)
 #ifdef NR_USART_2 
     Serial2.println(buf);  
 #endif          
-    pause(400);  // 400 [ms]  + (6 * bdPause) = 1000 [ms]
+    pause(200);  // 400 [ms]  + (6 * bdPause) = 1000 [ms]
   }
 }  // end of TaskBumpDist
 
@@ -331,7 +331,7 @@ void Task_A_U(void *pvParameters)
   int U_ML, U_MR, U__BAT, U_EXT;
   int I__ARD, I__RPI;
   static char buf[100];   
-  const int auPause = 500;  // [ms]
+  const int auPause = 100;  // [ms]
 
   while(1)
   {
@@ -359,7 +359,7 @@ void Task_A_U(void *pvParameters)
 #ifdef NR_USART_2 
     Serial2.println(buf);  
 #endif          
-    pause(2000);  // 2000 [ms]  + (6 * auPause) = 5000 [ms]
+    pause(200);  // 2000 [ms]  + (6 * auPause) = 5000 [ms]
   }
 }  // end of Task_A_U
 
