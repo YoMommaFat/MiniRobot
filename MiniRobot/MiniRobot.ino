@@ -166,21 +166,14 @@ void TaskClif(void *pvParameters) {
   int CFL, CFM, CFR;
   int CRL, CRM, CRR;
   static char buf[100];   
-  const int cPause = 50;  // [ms]
 
   while(1) {
     CFL = analogRead(CF_L);
-    pause(cPause);
     CFM = analogRead(CF_M);
-    pause(cPause);
     CFR = analogRead(CF_R);
-    pause(cPause);
     CRL = analogRead(CR_L);
-    pause(cPause);
     CRM = analogRead(CR_M);
-    pause(cPause);
     CRR = analogRead(CR_R);
-    pause(cPause);
 
     sprintf(buf, "{\"cmd\":\"cliff\",\"val\":[%d,%d,%d,%d,%d,%d]}", CFL, CFM, CFR, CRL, CRM, CRR);    // {"clif":[CFL, CFM, CFR, CRL, CRM, CRR]}
     USART.println(buf);  
@@ -200,21 +193,14 @@ void TaskBumpDist(void *pvParameters) {
  
   int BPL, BPR, DFL, DFM, DFR, DRM;
   static char buf[100];   
-  const int bdPause = 100;  // [ms]
 
   while(1) {
     BPL = digitalRead(BP_L);
-    pause(bdPause);
     BPR = digitalRead(BP_R);
-    pause(bdPause);
     DFL = analogRead(DF_L);
-    pause(bdPause);
     DFM = analogRead(DF_M);
-    pause(bdPause);
     DFR = analogRead(DF_R);
-    pause(bdPause);
     DRM = analogRead(DB_M);
-    pause(bdPause);
 
     sprintf(buf, "{\"cmd\":\"bump\",\"val\":[%d,%d]}", BPL, BPR);    // {"bump":[BPL, BPR, DFL, DFM, DFR, DRM]}
     USART.println(buf);  
@@ -234,21 +220,14 @@ void Task_A_U(void *pvParameters) {
  
   int adcML_VP, adcMR_VP, adcU_BAT, adcRS_OP, adcI_ARD, adcI_RPI;
   static char buf[100];
-  const int auPause = 100;  // [ms]
 
   while(1) {
     adcML_VP = analogRead(ML_VP);
-    pause(auPause);
     adcMR_VP = analogRead(MR_VP);
-    pause(auPause);
     adcU_BAT = analogRead(U_BAT);
-    pause(auPause);
-    adcRS_OP  = analogRead(RS_OP);
-    pause(auPause);
+    adcRS_OP = analogRead(RS_OP);
     adcI_ARD = analogRead(I_ARD);
-    pause(auPause);
     adcI_RPI = analogRead(I_RPI);
-    pause(auPause);
 
     sprintf(buf, "{\"cmd\":\"pwr\",\"val\":[%d,%d,%d,%d,%d,%d]}", adcU_BAT, adcRS_OP, adcI_ARD, adcI_RPI, adcML_VP, adcMR_VP);
     USART.println(buf);  
