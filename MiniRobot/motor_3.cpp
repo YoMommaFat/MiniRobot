@@ -38,16 +38,13 @@ void setMotor(int motor_no, int phase_pwm)  // MOTOR_L/MOTOR_R, -100..-1/0/+1..+
 {
   phase_pwm = (motor_no == MOTOR_R) ? -phase_pwm : phase_pwm;  // a jobb motor tengelye ellentétes, ezért a másik irány az előre
   phase_pwm *= PWM_100;                                        // hogy a táphoz lehessen igazítani a max V-t
-/*  if(abs(phase_pwm) < PWM_OFF_MARGIN)                          // ez kidobható, csak a STOP körüli "fütyülést" szünteti meg
-  {
+/*  if(abs(phase_pwm) < PWM_OFF_MARGIN) {                      // ez kidobható, csak a STOP körüli "fütyülést" szünteti meg
      motorDisable(motor_no);
   }
-  else
-  {
+  else {
      motorEnable(motor_no);
   }*/
 //  analogWrite(pwm[motor_no], phase_pwm + PWM_MIDDLE);
-
 //  const int enable[] = {ML_EN, MR_EN}; 
 //  const int pwm[] = {ML_PH, MR_PH}; 
   if (phase_pwm < 0) { digitalWrite(pwm[motor_no], HIGH); }

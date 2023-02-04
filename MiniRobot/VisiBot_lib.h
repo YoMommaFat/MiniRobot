@@ -164,7 +164,7 @@ public:
 
     void init()
     {
-      cntr = -999;
+      cntr = 0;
       old_cntr = -999;      
       pinMode(Apin,INPUT_PULLUP);
       pinMode(Bpin,INPUT_PULLUP);
@@ -198,7 +198,7 @@ public:
 
     void init()
     {
-      cntr = -999;
+      cntr = 0;
       old_cntr = -999;      
       pinMode(this->Apin,INPUT_PULLUP);
       pinMode(this->Bpin,INPUT_PULLUP);
