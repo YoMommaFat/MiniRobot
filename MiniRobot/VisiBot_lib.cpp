@@ -1,15 +1,3 @@
-/*
-file: VisiBot_lib.cpp
-date: 2022.08.12.
-auth: INIT - Szakáll Tibor
-vers: 1.3  2023.01.28.
-prev: Sinkovits Béla, "MiniRobot_1.5.ino"
-desc: + A VisiBot robot hardwer definíciója
-      + A motor enkóderekhez osztály 
-stat: OK
-*/
-
-// a hardver definíció
 #include "VisiBot_lib.h"
 
 void pause(int ms) { // a delay vs vTaskDelay feloldasa
@@ -32,9 +20,9 @@ void powerOff() { // Turn off Arduino
 }
 
 //  az osztály statikus változóinak létrehozása, sajnos ez kell
-volatile long RotEnc_L::old_cntr = -999;
+volatile long RotEnc_L::old_cntr = 0;
 volatile long RotEnc_L::cntr = 0; 
-volatile long RotEnc_R::old_cntr = -999;
+volatile long RotEnc_R::old_cntr = 0;
 volatile long RotEnc_R::cntr = 0; 
 
 /*
