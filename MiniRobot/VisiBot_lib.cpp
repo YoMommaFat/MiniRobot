@@ -21,9 +21,9 @@ void powerOff() { // Turn off Arduino
 
 //  az osztály statikus változóinak létrehozása, sajnos ez kell
 volatile long RotEnc_L::old_cntr = 0;
-volatile long RotEnc_L::cntr = 0; 
+volatile long RotEnc_L::cntr = 0;
 volatile long RotEnc_R::old_cntr = 0;
-volatile long RotEnc_R::cntr = 0; 
+volatile long RotEnc_R::cntr = 0;
 
 /*
 // Read the rotary encoder position in an atomic block to avoid a potential misread

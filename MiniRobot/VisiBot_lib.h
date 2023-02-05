@@ -2,9 +2,9 @@
 #define __VISIBOT_LIB_H
 
 #include <arduino.h>
-#include <Arduino_FreeRTOS.h>   // Arduino IDE-ből "FreeRTOS by Richard Barry"
+#include <Arduino_FreeRTOS.h> // Arduino IDE-ből "FreeRTOS by Richard Barry"
 
-#define RTOS_DELAY              // a Pause függvénynek a delay vs vTaskDelay feloldasához kell
+#define RTOS_DELAY // a Pause függvénynek a delay vs vTaskDelay feloldasához kell
 
 //Adafruit GRB LED
 #define LED_COUNT 2 //RGB pixel count
@@ -12,8 +12,8 @@
 #define LED_LEFT  1
 
 // VisiBot HW
-#define L_DAT 3         // RGB LED
-#define RGB_LED L_DAT   // szinoníma
+#define L_DAT 3 // RGB LED
+#define RGB_LED L_DAT // synonym
 #define LED1 57 // LED 1
 #define LED2 58 // LED 2
 
@@ -24,7 +24,7 @@
 // Right encoder
 #define ER_A 4
 #define ER_B 5
-#define ENC_INDEX_MAX 8   // az ISR miatt kell
+#define ENC_INDEX_MAX 8 // az ISR miatt kell
 
 #define PAR_BTN 50 // Power button
 #define PAR_HLD 51 // Power hold
@@ -120,22 +120,22 @@ class RotEnc_L { // az ISR static void miatt két "pin bedrótozott" osztályt h
     
     static void ISRread() {
       digitalRead(Bpin) ? cntr++ : cntr--;
-    }       
-    
+    }
+
   public:
     RotEnc_L() {
       init();
     }
     void init() {
       cntr = 0;
-      old_cntr = 0;      
+      old_cntr = 0;
       pinMode(Apin,INPUT_PULLUP);
       pinMode(Bpin,INPUT_PULLUP);
       attachInterrupt(digitalPinToInterrupt(Apin), ISRread, RISING);
     }
-    long getCnt() {  
-      return cntr;  
-    }  
+    long getCnt() {
+      return cntr;
+    }
 };
 
 class RotEnc_R { // az ISR static void miatt két "pin bedrótozott" osztályt használok
@@ -143,7 +143,7 @@ class RotEnc_R { // az ISR static void miatt két "pin bedrótozott" osztályt h
     const static byte Apin = ER_A;
     const static byte Bpin = ER_B;
     volatile static long old_cntr;
-    volatile static long cntr;  
+    volatile static long cntr;
 
     static void ISRread() {
       digitalRead(Bpin) ? cntr++ : cntr--;
@@ -155,14 +155,14 @@ class RotEnc_R { // az ISR static void miatt két "pin bedrótozott" osztályt h
     }
     void init() {
       cntr = 0;
-      old_cntr = 0;      
+      old_cntr = 0;
       pinMode(this->Apin,INPUT_PULLUP);
       pinMode(this->Bpin,INPUT_PULLUP);
       attachInterrupt(digitalPinToInterrupt(Apin), ISRread, RISING);
     }
-    long getCnt() {  
-      return cntr;  
-    }  
+    long getCnt() {
+      return cntr;
+    }
 };
 
 // FUNCTIONS

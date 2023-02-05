@@ -7,14 +7,14 @@ void motorInit() { // a motorokhoz tartozó pinek beállítása
   pinMode(ML_M2, OUTPUT);
   pinMode(ML_SL, OUTPUT);
   pinMode(ML_FT, INPUT);
-     
+
   pinMode(MR_PH, OUTPUT);
   pinMode(MR_EN, OUTPUT);
   pinMode(MR_M1, OUTPUT);
   pinMode(MR_M2, OUTPUT);
   pinMode(MR_SL, OUTPUT);
   pinMode(MR_FT, INPUT);
-  
+
   motorSleep(); // a motorok letiltva, stop pwm értéken
 }
 
@@ -24,7 +24,7 @@ void setMotor(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..
   if (phase_pwm < 0) { digitalWrite(phase[motor_no], HIGH); }
   else { digitalWrite(phase[motor_no], LOW); }
   analogWrite(enable[motor_no], abs(phase_pwm)*2);
-}  
+}
 
 void motorEnable(int motor_no) { // engedélyezzük a motort
   digitalWrite(enable[motor_no], HIGH);
