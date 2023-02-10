@@ -22,7 +22,8 @@ RotEnc_R encR;
 Adafruit_NeoPixel strip(LED_COUNT, RGB_LED, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  powerOn(); // Turn on self power hold (if JP1 is not used)
+  mainPowerOn(); // Turn on self power hold (if JP1 is not used)
+  auxPowerOn(); // Turn on power for Raspberry Pi
   analogReference(INTERNAL2V56);
   USART.begin(115200);
   Serial.begin(115200);
@@ -31,7 +32,7 @@ void setup() {
 
   // More custom functions can be found in RGBWstrandtest example sketch
   strip.begin();            // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.setBrightness(200); // Set BRIGHTNESS (max = 255)
+  strip.setBrightness(0);   // Set BRIGHTNESS (max = 255)
   strip.clear();            // Turn OFF all pixels
   strip.show();             // Show
 

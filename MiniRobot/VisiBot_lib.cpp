@@ -11,12 +11,20 @@ void pause(int ms) { // a delay vs vTaskDelay feloldasa
 #endif
 }
 
-void powerOn() { // Turn on self power hold for Arduino
+void mainPowerOn() { // Turn on self power hold for Arduino
     digitalWrite(PAR_HLD, HIGH);
 }
 
-void powerOff() { // Turn off Arduino
+void mainPowerOff() { // Turn off Arduino
     digitalWrite(PAR_HLD, LOW);
+}
+
+void auxPowerOn() { // Turn on auxiliary power
+    digitalWrite(P_RPI, HIGH);
+}
+
+void auxPowerOff() { // Turn off auxiliary power
+    digitalWrite(P_RPI, LOW);
 }
 
 //  az osztály statikus változóinak létrehozása, sajnos ez kell

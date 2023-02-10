@@ -28,6 +28,7 @@
 
 #define PAR_BTN 50 // Power button
 #define PAR_HLD 51 // Power hold
+#define P_RPI 26 // Auxiliary power
 
 // CLIF sensor
 // clif sensors power pins
@@ -166,8 +167,10 @@ class RotEnc_R { // az ISR static void miatt két "pin bedrótozott" osztályt h
 };
 
 // FUNCTIONS
-void pause(int ms); // a delay vs vTaskDelay feloldasa
-void powerOn();     // Turn on self power hold for Arduino
-void powerOff();    // Turn off Arduino
+void pause(int ms);   // a delay vs vTaskDelay feloldasa
+void mainPowerOn();   // Turn on self power hold for Arduino
+void mainPowerOff();  // Turn off Arduino
+void auxPowerOn();    // Turn on auxiliary power
+void auxPowerOff();   // Turn off auxiliary power
 
 #endif
