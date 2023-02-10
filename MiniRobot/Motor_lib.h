@@ -19,8 +19,8 @@ const int phase[] = {ML_PH, MR_PH};
 void motorInit(); // a motorokhoz tartozó pinek beállítása
 void setMotor(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
 
-void motorEnable(int motor_no); // engedélyezzük a motort
-void motorDisable(int motor_no); // letiltjuk a motort
+//void motorEnable(int motor_no); // engedélyezzük a motort
+//void motorDisable(int motor_no); // letiltjuk a motort
 
 void motorSleep(); // Turn off the motor power
 void motorWake(); // Turn on the motor power

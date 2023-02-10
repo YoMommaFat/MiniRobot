@@ -26,46 +26,46 @@ void setMotor(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..
   analogWrite(enable[motor_no], abs(phase_pwm)*2);
 }
 
-void motorEnable(int motor_no) { // engedélyezzük a motort
-  digitalWrite(enable[motor_no], HIGH);
+//void motorEnable(int motor_no) { // engedélyezzük a motort
+//  digitalWrite(enable[motor_no], HIGH);
+//}
+
+//void motorDisable(int motor_no) { // letiltjuk a motort
+//  digitalWrite(enable[motor_no], LOW);
+//}
+
+void motorSleep() { // Stop the motors power and sleep
+  setMotor(MOTOR_L, 0);
+  setMotor(MOTOR_R, 0);
+  digitalWrite(ML_SL, LOW);
+  digitalWrite(MR_SL, LOW);
 }
 
-void motorDisable(int motor_no) { // letiltjuk a motort
-  digitalWrite(enable[motor_no], LOW);
-}
-
-void motorSleep() { // Turn off the motors power AND disable AND stop pwm!
-    digitalWrite(ML_SL, LOW);
-    digitalWrite(MR_SL, LOW);
-    motorDisable(MOTOR_L);  // letiltjuk
-    motorDisable(MOTOR_R);  // letiltjuk 
-    setMotor(MOTOR_L, 0);   // le is allítjuk, ha legközelebb indulna
-    setMotor(MOTOR_R, 0);   // le is allítjuk, ha legközelebb indulna
-}
-
-void motorWake() { // Turn off the motor power, NO enabling, NO pwmchange!
-    digitalWrite(ML_SL, HIGH);
-    digitalWrite(MR_SL, HIGH);
-    pause(15); // Allow 5ms delay before applying PWM signals (DRV8801), need a 1ms for charge pump
+void motorWake() { // Stop the motors power and wake
+  setMotor(MOTOR_L, 0);
+  setMotor(MOTOR_R, 0);
+  digitalWrite(ML_SL, HIGH);
+  digitalWrite(MR_SL, HIGH);
+  pause(15); // Allow 5ms delay before applying PWM signals (DRV8801), need a 1ms for charge pump
 }
 
 void fastDecay() { // Set the decay mode of the motors
-    digitalWrite(ML_M1, LOW);
-    digitalWrite(ML_M2, LOW);
-    digitalWrite(MR_M1, LOW);
-    digitalWrite(MR_M2, LOW);
+  digitalWrite(ML_M1, LOW);
+  digitalWrite(ML_M2, LOW);
+  digitalWrite(MR_M1, LOW);
+  digitalWrite(MR_M2, LOW);
 }
 
 void slowDecayHigh() { // Set the decay mode of the motors
-    digitalWrite(ML_M1, HIGH);
-    digitalWrite(ML_M2, HIGH);
-    digitalWrite(MR_M1, HIGH);
-    digitalWrite(MR_M2, HIGH);
+  digitalWrite(ML_M1, HIGH);
+  digitalWrite(ML_M2, HIGH);
+  digitalWrite(MR_M1, HIGH);
+  digitalWrite(MR_M2, HIGH);
 }
 
 void slowDecayLow() { // Set the decay mode of the motors
-    digitalWrite(ML_M1, HIGH);
-    digitalWrite(ML_M2, LOW);
-    digitalWrite(MR_M1, HIGH);
-    digitalWrite(MR_M2, LOW);
+  digitalWrite(ML_M1, HIGH);
+  digitalWrite(ML_M2, LOW);
+  digitalWrite(MR_M1, HIGH);
+  digitalWrite(MR_M2, LOW);
 }

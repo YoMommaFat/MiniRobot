@@ -7,9 +7,10 @@
 #define RTOS_DELAY // a Pause függvénynek a delay vs vTaskDelay feloldasához kell
 
 //Adafruit GRB LED
-#define LED_COUNT 2 //RGB pixel count
+#define LED_COUNT 14 //RGB pixel count
+#define LED_RING 12
 #define LED_RIGHT 0
-#define LED_LEFT  1
+#define LED_LEFT 1
 
 // VisiBot HW
 #define L_DAT 3 // RGB LED
