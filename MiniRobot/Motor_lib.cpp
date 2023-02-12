@@ -1,8 +1,8 @@
 #include "Motor_lib.h"
 
-bool assistance = true;
 int storedPwmL = 0;
 int storedPwmR = 0;
+bool assistance = true;
 
 void motorInit() { // a motorokhoz tartozó pinek beállítása
   pinMode(ML_PH, OUTPUT);
@@ -22,25 +22,24 @@ void motorInit() { // a motorokhoz tartozó pinek beállítása
   motorSleep(); // a motorok letiltva, stop pwm értéken
 }
 
-void setMotorDest(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..+100
+void setMotorDest(int motor_no, int phase_pwm) { // Set motor desired PWM
   if (motor_no == MOTOR_L) { storedPwmL = phase_pwm; }
   else if (motor_no == MOTOR_R) { storedPwmR = phase_pwm; }
+  else { ; }
 }
 
-void setMotorPwm(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..+100
-  if (motor_no == MOTOR_L) { storedPwmL = phase_pwm; }
-  else if (motor_no == MOTOR_R) { storedPwmR = phase_pwm; }
-  phase_pwm = (motor_no == MOTOR_R) ? phase_pwm : -phase_pwm;  // a jobb motor tengelye ellentétes, ezért a másik irány az előre
-//  phase_pwm *= PWM_100;                                        // hogy a táphoz lehessen igazítani a max V-t
-  if (phase_pwm < 0) { digitalWrite(phase[motor_no], HIGH); }
-  else { digitalWrite(phase[motor_no], LOW); }
-  analogWrite(enable[motor_no], abs(phase_pwm)*2);
-}
-
-int getMotorPwm(int motor_no) { // Return motor PWM
+int getMotorDest(int motor_no) { // Get motor desired PWM
   if (motor_no == MOTOR_L) { return storedPwmL; }
   else if (motor_no == MOTOR_R) { return storedPwmR; }
   else { return 0; }
+}
+
+void setMotorPwm(int motor_no, int phase_pwm) { // Actuate motor with PWM
+//  phase_pwm *= PWM_100; // hogy a táphoz lehessen igazítani a max V-t
+  phase_pwm = (motor_no == MOTOR_R) ? phase_pwm : -phase_pwm; // a jobb motor tengelye ellentétes, ezért a másik irány az előre
+  if (phase_pwm < 0) { digitalWrite(phase[motor_no], HIGH); }
+  else { digitalWrite(phase[motor_no], LOW); }
+  analogWrite(enable[motor_no], abs(phase_pwm)*2);
 }
 
 void setMotorAssist(bool ifAssist) { // Set motor assistance

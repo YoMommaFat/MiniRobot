@@ -25,8 +25,8 @@ RotEnc_R encR;
 Adafruit_NeoPixel strip(LED_COUNT, RGB_LED, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  mainPowerOn(); // Turn on self power hold (if JP1 is not used)
-  auxPowerOn(); // Turn on power for Raspberry Pi
+  mainPowerOn();    // Turn on self power hold (if JP1 is not used)
+  auxPowerOn();     // Turn on power for Raspberry Pi
   analogReference(INTERNAL2V56);
   USART.begin(115200);
   Serial.begin(115200);
@@ -34,12 +34,12 @@ void setup() {
   slowDecayLow();   // Set the decay mode of the motors
 
   // More custom functions can be found in RGBWstrandtest example sketch
-  strip.begin();            // INITIALIZE NeoPixel strip object (REQUIRED)
+  strip.begin();    // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.setBrightness(255); // Set BRIGHTNESS (max = 255)
-  strip.clear();            // Turn off all pixels
+  strip.clear();    // Turn off all pixels
   strip.setPixelColor(LED_LEFT, 255, 255, 255);
   strip.setPixelColor(LED_RIGHT, 255, 255, 255);
-  strip.show();             // Show
+  strip.show();     // Show strip
 
   // pointer a funkcióra, neve, stack, params/NULL , priority, phandle/NULL
   // prioritás = [1,31] kisebb szám a kisebb prioritás, lehet/kell több egyenlő. 0 = IDLE foglalt!
@@ -165,13 +165,13 @@ void TaskCliff(void *pvParameters) { // TASK: a clif szenzorokat jelentgeti
       if (CRM < CLIFF_THR) { bCRM = true; } else { bCRM = false; }
       if (CRR < CLIFF_THR) { bCRR = true; } else { bCRR = false; }
 
-      if ((getMotorPwm(MOTOR_L) > 0) && (bCFL || bCFM)) { setMotorDest(MOTOR_L, 0); }
-      if ((getMotorPwm(MOTOR_L) < 0) && (bCRL || bCRM)) { setMotorDest(MOTOR_L, 0); }
-      if ((getMotorPwm(MOTOR_R) > 0) && (bCFR || bCFM)) { setMotorDest(MOTOR_R, 0); }
-      if ((getMotorPwm(MOTOR_R) < 0) && (bCRR || bCRM)) { setMotorDest(MOTOR_R, 0); }
+      if ((getMotorDest(MOTOR_L) > 0) && (bCFL || bCFM)) { setMotorDest(MOTOR_L, 0); }
+      if ((getMotorDest(MOTOR_L) < 0) && (bCRL || bCRM)) { setMotorDest(MOTOR_L, 0); }
+      if ((getMotorDest(MOTOR_R) > 0) && (bCFR || bCFM)) { setMotorDest(MOTOR_R, 0); }
+      if ((getMotorDest(MOTOR_R) < 0) && (bCRR || bCRM)) { setMotorDest(MOTOR_R, 0); }
     }
-    setMotorPwm(MOTOR_L, getMotorPwm(MOTOR_L));
-    setMotorPwm(MOTOR_R, getMotorPwm(MOTOR_R));
+    setMotorPwm(MOTOR_L, getMotorDest(MOTOR_L));
+    setMotorPwm(MOTOR_R, getMotorDest(MOTOR_R));
 
     sprintf(buf, "{\"cmd\":\"cliff\",\"val\":[%d,%d,%d,%d,%d,%d]}", CFL, CFM, CFR, CRL, CRM, CRR);
     USART.println(buf);  

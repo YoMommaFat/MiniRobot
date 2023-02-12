@@ -5,7 +5,6 @@
 #include <pins_arduino.h>
 #include "VisiBot_lib.h"
 
-// #define NMOTORS 2 // Number of motors
 // az AVR 2560 PWM-je elvileg 490Hz vagy 980Hz, de lehet változtatni
 // https://www.electronicwings.com/users/sanketmallawat91/projects/215/frequency-changing-of-pwm-pins-of-arduino-uno
 // a H-bridge max. 100kHz-t bír el
@@ -17,9 +16,9 @@ const int enable[] = {ML_EN, MR_EN};
 const int phase[] = {ML_PH, MR_PH};
 
 void motorInit(); // a motorokhoz tartozó pinek beállítása
-void setMotorDest(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
-void setMotorPwm(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
-int getMotorPwm(int motor_no); // Return motor PWM
+void setMotorDest(int motor_no, int phase_pwm); // Set motor desired PWM
+int getMotorDest(int motor_no); // Get motor desired PWM
+void setMotorPwm(int motor_no, int phase_pwm); // Actuate motor with PWM
 void setMotorAssist(bool ifAssist); // Set motor assistance
 bool getMotorAssist(); // Get motor assistance
 
@@ -28,7 +27,6 @@ bool getMotorAssist(); // Get motor assistance
 
 void motorSleep(); // Turn off the motor power
 void motorWake(); // Turn on the motor power
-void motorAssist(bool ifAssist); // Set motor assistance
 
 // Set the decay mode of the motors
 void fastDecay();
