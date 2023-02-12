@@ -17,13 +17,18 @@ const int enable[] = {ML_EN, MR_EN};
 const int phase[] = {ML_PH, MR_PH};
 
 void motorInit(); // a motorokhoz tartozó pinek beállítása
-void setMotor(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
+void setMotorDest(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
+void setMotorPwm(int motor_no, int phase_pwm); // MOTOR_L/MOTOR_R, 0..49/50/51..100
+int getMotorPwm(int motor_no); // Return motor PWM
+void setMotorAssist(bool ifAssist); // Set motor assistance
+bool getMotorAssist(); // Get motor assistance
 
 //void motorEnable(int motor_no); // engedélyezzük a motort
 //void motorDisable(int motor_no); // letiltjuk a motort
 
 void motorSleep(); // Turn off the motor power
 void motorWake(); // Turn on the motor power
+void motorAssist(bool ifAssist); // Set motor assistance
 
 // Set the decay mode of the motors
 void fastDecay();

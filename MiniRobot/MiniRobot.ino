@@ -13,6 +13,7 @@
 #define PAUSE_PWR 100
 #define PAUSE_BLINK 500
 #define PAUSE_LED 200 // 2400/12=200
+#define CLIFF_THR 32 // Cliff threshold
 #define USART Serial2 // Node-RED serial port
 //#define USART Serial
 
@@ -81,8 +82,8 @@ void TaskReceive(void *pvParameters) { // TASK: fogadja a json csomagokat
           Serial.print(", "); Serial.println(pwmR);
           if (pwmL < -90) pwmL = -90; else if (pwmL > 90) pwmL = 90;
           if (pwmR < -90) pwmR = -90; else if (pwmR > 90) pwmR = 90;
-          setMotor(MOTOR_L, pwmL);
-          setMotor(MOTOR_R, pwmR);
+          setMotorDest(MOTOR_L, pwmL);
+          setMotorDest(MOTOR_R, pwmR);
         }
         else if (command == "ledL") {
           color = doc["val"].as<long>();
@@ -139,6 +140,8 @@ void TaskCliff(void *pvParameters) { // TASK: a clif szenzorokat jelentgeti
   (void) pvParameters;
   int CFL, CFM, CFR;
   int CRL, CRM, CRR;
+  bool bCFL, bCFM, bCFR;
+  bool bCRL, bCRM, bCRR;
   static char buf[100];
   Serial.println("Clif task: running.");
   pinMode(CF_PW, OUTPUT); // Front cliff FET power init
@@ -153,6 +156,23 @@ void TaskCliff(void *pvParameters) { // TASK: a clif szenzorokat jelentgeti
     CRL = analogRead(CR_L);
     CRM = analogRead(CR_M);
     CRR = analogRead(CR_R);
+
+    if (getMotorAssist()) {
+      if (CFL < CLIFF_THR) { bCFL = true; } else { bCFL = false; }
+      if (CFM < CLIFF_THR) { bCFM = true; } else { bCFM = false; }
+      if (CFR < CLIFF_THR) { bCFR = true; } else { bCFR = false; }
+      if (CRL < CLIFF_THR) { bCRL = true; } else { bCRL = false; }
+      if (CRM < CLIFF_THR) { bCRM = true; } else { bCRM = false; }
+      if (CRR < CLIFF_THR) { bCRR = true; } else { bCRR = false; }
+
+      if ((getMotorPwm(MOTOR_L) > 0) && (bCFL || bCFM)) { setMotorDest(MOTOR_L, 0); }
+      if ((getMotorPwm(MOTOR_L) < 0) && (bCRL || bCRM)) { setMotorDest(MOTOR_L, 0); }
+      if ((getMotorPwm(MOTOR_R) > 0) && (bCFR || bCFM)) { setMotorDest(MOTOR_R, 0); }
+      if ((getMotorPwm(MOTOR_R) < 0) && (bCRR || bCRM)) { setMotorDest(MOTOR_R, 0); }
+    }
+    setMotorPwm(MOTOR_L, getMotorPwm(MOTOR_L));
+    setMotorPwm(MOTOR_R, getMotorPwm(MOTOR_R));
+
     sprintf(buf, "{\"cmd\":\"cliff\",\"val\":[%d,%d,%d,%d,%d,%d]}", CFL, CFM, CFR, CRL, CRM, CRR);
     USART.println(buf);  
     pause(PAUSE_CLIFF);

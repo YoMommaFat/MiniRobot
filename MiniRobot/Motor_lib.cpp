@@ -1,5 +1,9 @@
 #include "Motor_lib.h"
 
+bool assistance = true;
+int storedPwmL = 0;
+int storedPwmR = 0;
+
 void motorInit() { // a motorokhoz tartozó pinek beállítása
   pinMode(ML_PH, OUTPUT);
   pinMode(ML_EN, OUTPUT);
@@ -18,12 +22,33 @@ void motorInit() { // a motorokhoz tartozó pinek beállítása
   motorSleep(); // a motorok letiltva, stop pwm értéken
 }
 
-void setMotor(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..+100
-  phase_pwm = (motor_no == MOTOR_R) ? -phase_pwm : phase_pwm;  // a jobb motor tengelye ellentétes, ezért a másik irány az előre
+void setMotorDest(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..+100
+  if (motor_no == MOTOR_L) { storedPwmL = phase_pwm; }
+  else if (motor_no == MOTOR_R) { storedPwmR = phase_pwm; }
+}
+
+void setMotorPwm(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..+100
+  if (motor_no == MOTOR_L) { storedPwmL = phase_pwm; }
+  else if (motor_no == MOTOR_R) { storedPwmR = phase_pwm; }
+  phase_pwm = (motor_no == MOTOR_R) ? phase_pwm : -phase_pwm;  // a jobb motor tengelye ellentétes, ezért a másik irány az előre
 //  phase_pwm *= PWM_100;                                        // hogy a táphoz lehessen igazítani a max V-t
   if (phase_pwm < 0) { digitalWrite(phase[motor_no], HIGH); }
   else { digitalWrite(phase[motor_no], LOW); }
   analogWrite(enable[motor_no], abs(phase_pwm)*2);
+}
+
+int getMotorPwm(int motor_no) { // Return motor PWM
+  if (motor_no == MOTOR_L) { return storedPwmL; }
+  else if (motor_no == MOTOR_R) { return storedPwmR; }
+  else { return 0; }
+}
+
+void setMotorAssist(bool ifAssist) { // Set motor assistance
+  assistance = ifAssist;
+}
+
+bool getMotorAssist() { // Get motor assistance
+  return assistance;
 }
 
 //void motorEnable(int motor_no) { // engedélyezzük a motort
@@ -35,15 +60,15 @@ void setMotor(int motor_no, int phase_pwm) { // MOTOR_L/MOTOR_R, -100..-1/0/+1..
 //}
 
 void motorSleep() { // Stop the motors power and sleep
-  setMotor(MOTOR_L, 0);
-  setMotor(MOTOR_R, 0);
+  setMotorPwm(MOTOR_L, 0);
+  setMotorPwm(MOTOR_R, 0);
   digitalWrite(ML_SL, LOW);
   digitalWrite(MR_SL, LOW);
 }
 
 void motorWake() { // Stop the motors power and wake
-  setMotor(MOTOR_L, 0);
-  setMotor(MOTOR_R, 0);
+  setMotorPwm(MOTOR_L, 0);
+  setMotorPwm(MOTOR_R, 0);
   digitalWrite(ML_SL, HIGH);
   digitalWrite(MR_SL, HIGH);
   pause(15); // Allow 5ms delay before applying PWM signals (DRV8801), need a 1ms for charge pump
