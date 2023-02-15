@@ -122,7 +122,7 @@ void TaskReceive(void *pvParameters) { // TASK: fogadja a json csomagokat
 void TaskMotor(void *pvParameters) { // TASK: további motor init, valamint az enkódereket jelentgeti
   (void) pvParameters;
   static char buf[32];
-  int left, right;
+  long left, right;
   Serial.print("Time constant: "); Serial.print(portTICK_PERIOD_MS); Serial.println(".");
   Serial.println("Motor task: running.");
   motorWake(); // Turn on motors
@@ -130,7 +130,7 @@ void TaskMotor(void *pvParameters) { // TASK: további motor init, valamint az e
   while (1) {
     left = encL.getCnt();
     right = encR.getCnt();
-    sprintf(buf, "{\"cmd\":\"enc\",\"val\":[%d,%d]}", left, right);
+    sprintf(buf, "{\"cmd\":\"enc\",\"val\":[%ld,%ld]}", left, right);
     USART.println(buf);
     pause(PAUSE_ENC);
   }

@@ -36,7 +36,7 @@ int getMotorDest(int motor_no) { // Get motor desired PWM
 
 void setMotorPwm(int motor_no, int phase_pwm) { // Actuate motor with PWM
 //  phase_pwm *= PWM_100; // hogy a táphoz lehessen igazítani a max V-t
-  phase_pwm = (motor_no == MOTOR_R) ? phase_pwm : -phase_pwm; // a jobb motor tengelye ellentétes, ezért a másik irány az előre
+  phase_pwm = (motor_no == MOTOR_R) ? phase_pwm : -phase_pwm; // Right motor rotates in opposite direction
   if (phase_pwm < 0) { digitalWrite(phase[motor_no], HIGH); }
   else { digitalWrite(phase[motor_no], LOW); }
   analogWrite(enable[motor_no], abs(phase_pwm)*2);

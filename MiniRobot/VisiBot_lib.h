@@ -163,7 +163,7 @@ class RotEnc_R { // az ISR static void miatt két "pin bedrótozott" osztályt h
       attachInterrupt(digitalPinToInterrupt(Apin), ISRread, RISING);
     }
     long getCnt() {
-      return cntr;
+      return -cntr; // Right motor rotates in opposite direction
     }
 };
 
