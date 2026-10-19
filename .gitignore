@@ -1,0 +1,27 @@
+# Titkos környezeti változók és API kulcsok
+.env
+.env.*
+!.env.example
+
+# Python cache és virtuális környezetek
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+rai_venv/
+
+# ROS 2 (colcon) fordítási és napló mappák
+build/
+install/
+log/
+
+# Lokális TTS hangmodellek (Piper ONNX)
+*.onnx
+*.onnx.json
+
+# OS és IDE fájlok
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

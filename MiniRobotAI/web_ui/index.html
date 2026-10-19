@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniRobot Web Face</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- KÉT KÜLÖN GOMB A SARKOKBA -->
+    <div id="emotion-toggle" onclick="toggleEmotions()" title="Érzelmek Tesztelése">🎭</div>
+    <div id="debug-toggle" onclick="toggleDebug()" title="Mérnöki Műszerfal">⚙️</div>
+
+    <div class="visor-container">
+        <div class="visor">
+            <div class="brow left" id="brow-l"></div>
+            <div class="brow right" id="brow-r"></div>
+            <div class="eye left" id="eye-l"></div>
+            <div class="eye right" id="eye-r"></div>
+            <div class="mouth" id="mouth"></div>
+        </div>
+    </div>
+
+    <!-- ÉRZELEM TESZT PANEL (A te gombjaid! Alapból rejtve, a 🎭 gombbal nyílik) -->
+    <div class="controls" id="controls" style="display: none; flex-direction: column; align-items: center; position: absolute; bottom: 20px; z-index: 100;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <button onclick="setEmotion('READY')">READY</button>
+            <button onclick="setEmotion('SUCCESS')">SUCCESS</button>
+            <button onclick="setEmotion('ALERT')">ALERT</button>
+            <button onclick="setEmotion('CONFUSED')">CONFUSED</button>
+            <button onclick="setEmotion('WINK')">WINK</button>
+            <button onclick="setEmotion('AFFECTION')">AFFECTION</button>
+            <button onclick="setEmotion('OBSERVING')">OBSERVING</button>
+            <button onclick="setEmotion('CURIOSITY')">CURIOSITY</button>
+            <button onclick="setEmotion('THINKING')">THINKING</button>
+            <button onclick="setEmotion('SORRY')">SORRY</button>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 5px;">
+            <button onclick="setSpeaking(true)">Speak START</button>
+            <button onclick="setSpeaking(false)">Speak STOP</button>
+        </div>
+    </div>
+
+    <!-- DEBUG MŰSZERFAL (A ⚙️ gombbal nyílik) -->
+    <div id="debug-panel">
+        <!-- 1. OSZLOP -->
+        <div class="debug-col">
+            <h3>SZENZOR & AKKU</h3>
+            <div class="battery-container">
+                <div style="color: #aaa;">AKKU fesz: <span id="batt-val" style="color: #fff;">-- V</span></div>
+                <div class="custom-progress" style="margin: 6px 0;">
+                    <div id="battery-fill" class="custom-progress-fill"></div>
+                </div>
+                <div style="color: #aaa;">
+                    RPI áram: <span id="cur-rpi" style="color: #fff;">-- A</span><br>
+                    ARD áram: <span id="cur-ard" style="color: #fff;">-- A</span>
+                </div>
+            </div>
+            <div class="sensor-map">
+                <div class="bot-body">
+                    <!-- Ütközők (két negyedkör ív) -->
+                    <div id="sens-bpl" class="bumper bumper-left"></div>
+                    <div id="sens-bpr" class="bumper bumper-right"></div>
+                    
+                    <!-- Szakadék szenzorok (3 elöl) -->
+                    <div id="sens-cfl" class="cliff-dot" style="top: 14%; left: 14%;"></div>
+                    <div id="sens-cfm" class="cliff-dot" style="top: 2%; left: 43%;"></div>
+                    <div id="sens-cfr" class="cliff-dot" style="top: 14%; right: 14%;"></div>
+                    
+                    <!-- Szakadék szenzorok (3 hátul) -->
+                    <div id="sens-crl" class="cliff-dot" style="bottom: 14%; left: 14%;"></div>
+                    <div id="sens-crm" class="cliff-dot" style="bottom: 2%; left: 43%;"></div>
+                    <div id="sens-crr" class="cliff-dot" style="bottom: 14%; right: 14%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. OSZLOP -->
+        <div class="debug-col">
+            <h3>VEZÉRLÉS & ODOM</h3>
+            <div id="joystick-zone"></div>
+            <div class="odom-data">
+                L: <span id="enc-l">0</span> | R: <span id="enc-r">0</span>
+            </div>
+        </div>
+        
+        <!-- 3. OSZLOP -->
+        <div class="debug-col">
+            <h3>AI & RENDSZER</h3>
+            <div class="ai-status">
+                <span class="ai-dot" id="ai-asr"></span> HALLÁS<br>
+                <span class="ai-dot" id="ai-llm"></span> GONDOLKODÁS<br>
+                <span class="ai-dot" id="ai-tts"></span> BESZÉD
+            </div>
+            <button class="panic-btn" onclick="sendPanic()">VÉSZLEÁLLÍTÁS</button>
+        </div>
+    </div>
+
+    <!-- Könyvtárak betöltése: ROS 2 kommunikáció + Virtuális Joystick -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.1/nipplejs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.3.0/roslib.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

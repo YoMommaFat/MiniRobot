@@ -1,0 +1,334 @@
+:root {
+    /* Base color, dynamically changed by JS */
+    --face-color: cyan;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(10, 10, 15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Consolas', monospace;
+}
+
+.visor-container {
+    position: relative;
+    width: 480px;
+    height: 640px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The black glass "visor" around the eyes */
+.visor {
+    position: relative;
+    width: 360px;
+    height: 240px;
+    border-radius: 30%; /* CSS Superellipse effect */
+    background: rgb(20, 20, 30);
+    border: 3px solid rgb(60, 60, 75);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+}
+
+/* --- EYES --- */
+.eye {
+    position: absolute;
+    width: 60px;
+    height: 72px; /* 60 * 1.2 */
+    background-color: var(--face-color);
+    border-radius: 50%;
+    top: 50px;
+    /* 100% hardware-accelerated "glow" effect */
+    box-shadow: 0 0 15px var(--face-color), 0 0 40px var(--face-color);
+    /* The core of the animation: all transitions take 0.4s */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eye.left { left: 70px; }
+.eye.right { right: 70px; }
+
+/* Different eye shapes */
+.eye.normal { 
+    /* Explicit base state, inherits from .eye */ 
+}
+.eye.closed { height: 8px; border-radius: 4px; top: 82px; }
+.eye.squint { height: 40px; top: 66px; }
+.eye.happy { border-radius: 50% 50% 0 0; height: 50px; top: 61px; }
+
+/* Heart shaped eye (AFFECTION) */
+.eye::before, .eye::after {
+    content: "";
+    position: absolute;
+    background-color: var(--face-color);
+    border-radius: 50px 50px 0 0;
+    width: 40px;
+    height: 60px;
+    top: 10px; /* Push down to center vertically */
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.eye::before {
+    left: 30px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+.eye::after {
+    left: -10px;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+.eye.heart {
+    background-color: transparent;
+    box-shadow: none;
+    filter: drop-shadow(0 0 15px var(--face-color)) drop-shadow(0 0 30px var(--face-color));
+}
+.eye.heart::before, .eye.heart::after {
+    opacity: 1;
+}
+
+/* --- MOUTH --- */
+.mouth {
+    position: absolute;
+    width: 90px;
+    height: 8px;
+    background-color: var(--face-color);
+    top: 170px;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--face-color), 0 0 30px var(--face-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* We draw a smile using CSS border (transparent background + bottom border) */
+.mouth.normal {
+    /* Explicit base state, straight line */
+}
+.mouth.smile {
+    height: 30px;
+    background-color: transparent;
+    border: 8px solid var(--face-color);
+    border-top: none;
+    border-radius: 0 0 50px 50px;
+    box-shadow: 0 0 15px -5px var(--face-color);
+    filter: drop-shadow(0 0 10px var(--face-color));
+}
+
+.mouth.sad {
+    height: 30px;
+    top: 160px;
+    background-color: transparent;
+    border: 8px solid var(--face-color);
+    border-bottom: none;
+    border-radius: 50px 50px 0 0;
+    box-shadow: 0 0 15px -5px var(--face-color);
+    filter: drop-shadow(0 0 10px var(--face-color));
+}
+
+.mouth.circle {
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 8px solid var(--face-color);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--face-color), 0 0 15px var(--face-color);
+    filter: drop-shadow(0 0 10px var(--face-color));
+}
+
+.mouth.hidden {
+    opacity: 0;
+}
+
+@keyframes speakPulse {
+    0% { height: 8px; border-radius: 4px; }
+    50% { height: 25px; border-radius: 15px; }
+    100% { height: 8px; border-radius: 4px; }
+}
+
+.mouth.speaking {
+    /* 100% hardware animation instead of JS setInterval */
+    animation: speakPulse 0.3s infinite ease-in-out;
+}
+
+/* --- BROWS --- */
+.brow {
+    position: absolute;
+    width: 0px; /* Hidden by default (width 0) */
+    height: 8px;
+    background-color: var(--face-color);
+    top: 25px;
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--face-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.brow.hidden {
+    /* Explicit hidden state */
+    opacity: 0;
+    width: 0px;
+}
+
+.brow.left { left: 60px; transform-origin: right center; }
+.brow.right { right: 60px; transform-origin: left center; }
+.brow.visible { opacity: 1; width: 80px; }
+
+/* Angry (tilts inwards) and sad (tilts outwards) angles */
+.brow.angry.left { transform: rotate(20deg) translateY(10px); }
+.brow.angry.right { transform: rotate(-20deg) translateY(10px); }
+.brow.alert.left { transform: rotate(10deg) translateY(5px); }
+.brow.alert.right { transform: rotate(-10deg) translateY(5px); }
+.brow.sad.left { transform: rotate(-15deg) translateY(5px); }
+.brow.sad.right { transform: rotate(15deg) translateY(5px); }
+
+/* Confused (Asymmetrical "The Rock" raised eyebrow) */
+.brow.confused.left { transform: rotate(5deg) translateY(-5px); }
+.brow.confused.right { transform: rotate(-20deg) translateY(10px); }
+
+/* --- Test panel --- */
+.controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 480px;
+    max-width: 95%;
+}
+button {
+    padding: 8px 16px;
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+}
+button:hover { background: #444; }
+
+/* --- GOMBOK --- */
+#debug-toggle, #emotion-toggle {
+    position: absolute;
+    top: 15px;
+    font-size: 24px;
+    opacity: 0.3;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s;
+}
+#debug-toggle { right: 15px; }
+#emotion-toggle { left: 15px; }
+
+#debug-toggle:hover, #emotion-toggle:hover { opacity: 1; transform: scale(1.2); }
+
+/* Amikor aktív a debug mód */
+body.debug-active {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+body.debug-active .visor-container {
+    /* Az arc mostantól NEM zsugorodik, csak feljebb csúszik */
+    height: 480px; 
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 10px;
+}
+body.debug-active .controls { 
+    display: none !important; /* Visszaállítva: Ha a műszerfal nyitva, az érzelem eltűnik! */
+}
+
+#debug-panel {
+    display: none;
+    width: 480px;
+    max-width: 95%;
+    height: auto;
+    min-height: 180px;
+    background: rgba(20, 20, 30, 0.9);
+    border: 2px solid #444;
+    border-radius: 10px;
+    color: #0f0;
+    font-family: 'Consolas', monospace;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px 5px;
+    box-shadow: 0 0 30px rgba(0,255,0,0.1);
+}
+body.debug-active #debug-panel {
+    display: flex;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.debug-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px dashed #444;
+    padding: 0 5px;
+}
+.debug-col:last-child { border-right: none; }
+.debug-col h3 { margin-top: 0; margin-bottom: 12px; color: #fff; font-size: 15px; text-decoration: underline; text-align: center; }
+
+.battery-container { width: 100%; text-align: center; margin-bottom: 15px; font-size: 14px; }
+.custom-progress { width: 100%; height: 8px; background-color: #333; border-radius: 3px; overflow: hidden; border: 1px solid #555; }
+.custom-progress-fill { height: 100%; width: 0%; background-color: #0f0; transition: width 0.3s ease, background-color 0.3s ease; }
+progress.low { accent-color: #f00; }
+
+.sensor-map {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 10px auto;
+}
+.bot-body {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed #0f0;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 255, 0, 0.05);
+}
+
+/* Roomba Veszély-Szenzorok */
+.cliff-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #333; border: 1px solid #666; }
+.cliff-dot.active { background: #f00; box-shadow: 0 0 15px #f00; border-color: #fff; }
+
+.bumper { 
+    position: absolute; 
+    width: 106px; 
+    height: 106px; 
+    border-radius: 50%; 
+    border: 4px solid transparent; 
+    top: -7px; 
+    left: -7px; 
+}
+.bumper-left { border-top-color: #555; border-left-color: #555; clip-path: inset(0 50% 50% 0); }
+.bumper-right { border-top-color: #555; border-right-color: #555; clip-path: inset(0 0 50% 50%); }
+
+.bumper.active { border-color: #f00; filter: drop-shadow(0 0 10px #f00); }
+
+#joystick-zone { width: 120px; height: 120px; position: relative; background: rgba(0,255,0,0.05); border-radius: 50%; border: 1px dashed #0f0; margin-bottom: 15px; }
+.odom-data { margin-top: 5px; font-size: 14px; }
+
+.ai-status { width: 100%; font-size: 14px; line-height: 1.8; margin-bottom: 15px; font-weight: bold; }
+.ai-dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #222; margin-right: 8px; border: 1px solid #555; }
+.ai-dot.active { background: #0f0; box-shadow: 0 0 15px #0f0; }
+.ai-dot.thinking { background: #ff0; box-shadow: 0 0 15px #ff0; }
+
+.panic-btn { background: #800; color: #fff; font-weight: bold; border: 2px solid #f00; padding: 10px 20px; border-radius: 5px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+.panic-btn:hover { background: #f00; box-shadow: 0 0 20px #f00; }
