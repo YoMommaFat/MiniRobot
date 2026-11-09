@@ -1,0 +1,58 @@
+# ============================================================================
+# RAI (RobotecAI) Keretrendszer Konfigurációs Fájl (config.toml)
+# ============================================================================
+# FIGYELEM: Ez a fájl a RAI keretrendszer belső modellválasztó konfigurációja.
+# Új (nem szabványos) kulcsokat vagy API kulcsokat TILOS beleírni, mert a RAI
+# indításkor szigorú sémavalidációt (Pydantic) végez rajta!
+# Az API kulcsokat a .env fájlban, a robot saját (ASR/TTS/Arc) beállításait
+# pedig a robot_config.json és robot_prompt.json fájlokban kell megadni.
+# ============================================================================
+
+[vendor]
+# Melyik AI szolgáltatót használja a központi ágens (agent.py)?
+# Lehetséges értékek: "google", "openai", "aws", "ollama"
+simple_model = "google"      # Egyszerűbb feladatokhoz használt szolgáltató
+complex_model = "google"     # Összetett (ReAct ágens) gondolkodáshoz használt szolgáltató
+embeddings_model = "google"  # Szövegbeágyazáshoz (vektorizáláshoz/RAG) használt szolgáltató
+
+[google]
+# Google Gemini modellek (ha a [vendor] részben "google" van kiválasztva)
+# A hozzá tartozó GOOGLE_API_KEY a .env fájlból töltődik be.
+simple_model = "gemini-3.8-flash"
+complex_model = "gemini-3.8-flash"
+embeddings_model = "gemini-embedding-2"
+
+[openai]
+# OpenAI kompatibilis modellek (ha a [vendor] részben "openai" van kiválasztva)
+simple_model = "gpt-4o-mini"
+complex_model = "gpt-4o"
+embeddings_model = "text-embedding-ada-002"
+base_url = "https://api.openai.com/v1/"
+
+[ollama]
+# Lokálisan futó LLM modellek (ha a [vendor] részben "ollama" van kiválasztva)
+simple_model = "llama3.2"
+complex_model = "llama3.1:70b"
+embeddings_model = "llama3.2"
+base_url = "http://localhost:11434"
+
+[aws]
+# Amazon Bedrock modellek (ha a [vendor] részben "aws" van kiválasztva)
+simple_model = "anthropic.claude-3-haiku-20240307-v1:0"
+complex_model = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+embeddings_model = "amazon.titan-embed-text-v1"
+region_name = "us-east-1"
+
+[tracing]
+# Hibakeresési és LLM híváskövetési (telemetria) projekt neve
+project = "rai"
+
+[tracing.langfuse]
+# Langfuse (lokális vagy felhős LLM naplózás) be/kikapcsolása
+use_langfuse = false
+host = "http://localhost:3000"
+
+[tracing.langsmith]
+# LangSmith (LangChain hivatalos nyomkövetője) be/kikapcsolása
+use_langsmith = false
+host = "https://api.smith.langchain.com"
