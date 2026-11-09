@@ -1,0 +1,83 @@
+{
+  "_leiras": "MiniRobot saját moduljainak beállításai (ASR fül, TTS száj, WebSocket arc). A '_' jellel kezdődő sorok csak magyarázó kommentek.",
+
+  "asr": {
+    "_szekcio": "Beszédfelismerés (asr_node.py) – Mikrofon figyelés (Silero VAD) és beszéd-szöveg átalakítás (Groq Whisper API).",
+
+    "_model_name_info": "A Groq felhőben futó Whisper modell típusa (pl. 'whisper-large-v3' vagy 'whisper-large-v3-turbo').",
+    "model_name": "whisper-large-v3",
+
+    "_language_info": "A felismert beszéd nyelve (ISO kód: 'hu' = magyar, 'en' = angol).",
+    "language": "hu",
+
+    "_sample_rate_info": "Mikrofon mintavételi frekvencia Hz-ben (a Silero VAD és a Whisper 16000 Hz-et vár).",
+    "sample_rate": 16000,
+
+    "_vad_threshold_info": "Hangérzékelési (VAD) érzékenységi küszöb (0.0 - 1.0). Alacsonyabb = érzékenyebb a halk beszédre; magasabb = jobban szűri a háttérzajt.",
+    "vad_threshold": 0.4,
+
+    "_grace_period_info": "Másodpercben megadott csend-várakozás a beszéd végén, mielőtt a mondatot lezártnak tekinti és elküldi leiratozásra.",
+    "grace_period": 1.5,
+
+    "_device_name_info": "Bemeneti mikrofon hangeszköz neve a rendszerben ('default' = alapértelmezett rendszer-mikrofon).",
+    "device_name": "default"
+  },
+
+  "tts": {
+    "_szekcio": "Beszédszintézis (tts_node.py) – Lokális, RAM-ban futó Piper neurális szövegfelolvasó.",
+
+    "_piper_model_info": "A használt magyar Piper ONNX hangmodell fájljának neve (mellette kell lennie a .onnx.json fájlnak is).",
+    "piper_model": "hu_HU-berta-medium.onnx",
+
+    "_audio_device_info": "Kimeneti ALSA/PulseAudio lejátszó eszköz neve az aplay parancshoz ('pulse' ajánlott az eszközfoglalási hibák elkerüléséhez).",
+    "audio_device": "pulse",
+
+    "_sample_rate_info": "A Piper hangmodell kimeneti mintavételi frekvenciája Hz-ben (a medium magyar modelleknél 22050 Hz).",
+    "sample_rate": 22050
+  },
+
+  "face": {
+    "_szekcio": "Grafikus arc kijelző szerver (face_node.py) – WebSocket kapcsolat a böngészős Web UI felé.",
+
+    "_ws_host_info": "A WebSocket szerver figyelési címe ('0.0.0.0' = a helyi hálózat minden gépéről elérhető, '127.0.0.1' = csak helyben).",
+    "ws_host": "0.0.0.0",
+
+    "_ws_port_info": "A WebSocket szerver TCP portja, amelyre a web_ui/app.js csatlakozik az érzelmek és a szájmozgás fogadásához.",
+    "ws_port": 8765
+  },
+
+  "camera": {
+    "_szekcio": "Kamera (camera_node.py) – a kamera képei ROS topikon: /camera/image_raw (sensor_msgs/Image, bgr8, ezt olvassa a nod_tool.py) és /camera/image_raw/compressed (JPEG, Wi-Fi-n keresztüli nézéshez).",
+
+    "_backend_info": "Képforrás: 'rpicam' = Raspberry Pi kameramodul szalagkábellel (az rpicam-vid programot futtatja, ezért előtte az 'rpicam-hello --list-cameras' parancsnak listáznia kell a kamerát); 'opencv' = USB webkamera.",
+    "backend": "rpicam",
+
+    "_topic_info": "A nyers kép topikja. A tömörített kép topikja ugyanez + '/compressed'.",
+    "topic": "/camera/image_raw",
+
+    "_frame_id_info": "A képek fejlécében szereplő koordináta-rendszer neve.",
+    "frame_id": "camera_link",
+
+    "_size_info": "Képméret pixelben. 640×480 elég az ágensnek, és kíméli a processzort.",
+    "width": 640,
+    "height": 480,
+
+    "_framerate_info": "Képek másodpercenként.",
+    "framerate": 10,
+
+    "_jpeg_quality_info": "A tömörített (JPEG) kép minősége, 1–100.",
+    "jpeg_quality": 80,
+
+    "_rotate_180_info": "true, ha a kamera fejjel lefelé van beszerelve.",
+    "rotate_180": false,
+
+    "_rpicam_camera_info": "Csak 'rpicam': melyik kameracsatlakozó (a Pi 5-ön 0 vagy 1).",
+    "rpicam_camera": 0,
+
+    "_rpicam_extra_args_info": "Csak 'rpicam': további rpicam-vid kapcsolók listája, pl. [\"--hflip\"] vagy [\"--mode\", \"1640:1232\"] (érzékelő mód, ha a kép le van vágva / be van nagyítva).",
+    "rpicam_extra_args": [],
+
+    "_device_info": "Csak 'opencv': a webkamera száma (0), eszközfájlja ('/dev/video0' vagy az újraindítás után is változatlan '/dev/v4l/by-id/...' név), vagy teszteléshez egy videófájl útvonala. A kamerák listája: v4l2-ctl --list-devices",
+    "device": 0
+  }
+}
